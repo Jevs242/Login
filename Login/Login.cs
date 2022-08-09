@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Office.Interop.Excel;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Text.RegularExpressions;
 
 namespace Login
 {
-    public partial class Form1 : Form
+    public partial class Login : Form
     {
-        List<string> listEmail = new List<string>();
-        List<string> listPassword = new List<string>();
-
+        string path = Directory.GetCurrentDirectory() + "\\Accounts.xlsx";
+        Excel.Application excel = new Excel.Application();
+        Workbook wb;
+        Worksheet ws;
+        public List<string> listEmail = new List<string>();
+        public List<string> listPassword = new List<string>();
+        
         private void readExcel()
         {
-            string path = Directory.GetCurrentDirectory() + "\\Accounts.xlsx";
-            Excel.Application excel = new Excel.Application();
-            Workbook wb;
-            Worksheet ws;
+            
 
             wb = excel.Workbooks.Open(path);
 
@@ -42,65 +39,53 @@ namespace Login
                 listPassword.Add(Result);
             }
 
-            //MessageBox.Show(cellValue);
+            wb.Close(true);
+            excel.Quit();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
         }
 
 
-        public Form1()
+        public Login()
         {
             InitializeComponent();
-            readExcel();
-        }
-        
-
-        public void OpenFile()
-        {
-           //MessageBox.Show(cell.)
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            readExcel();
         }
 
         private void btn_Summit_Click(object sender, EventArgs e)
         {
             string email = tbx_Email.Text;
             string password = tbx_password.Text;
-            bool success = false; 
+            bool success = false;
+            int numEmail = 0;
 
-            for(int i = 0; i < listEmail.Count; i++)
+            for (int i = 0; i < listEmail.Count; i++)
             {
-                if(listEmail[i] == "Email")
+                if (listEmail[i] == "Email")
                 {
                     continue;
                 }
 
-                if(listEmail[i] == email.ToLower())
+                if (listEmail[i] == email.ToLower())
                 {
-                    //lbl_Error.Text = "This email address is already used";
                     success = true;
+                    numEmail = i;
                     break;
                 }
             }
-            if(success)
+            if (success)
             {
-                for (int i = 0; i < listPassword.Count; i++)
+                if (password == listPassword[numEmail])
                 {
-                    if (listEmail[i] == "Password")
-                    {
-                        continue;
-                    }
-
-                    if (listPassword[i] == password)
-                    {
-                        success = true;
-                        break;
-                    }
-                    else
-                    {
-                        success = false;
-                    }
+                    success = true;
+                }
+                else
+                {
+                    success = false;
                 }
             }
             if (success)
@@ -115,7 +100,20 @@ namespace Login
             }
 
         }
+
+        private void btn_signup_Click(object sender, EventArgs e)
+        {
+            CreateAccount Form2 = new CreateAccount();
+            this.Hide();
+            Form2.Show();
+        }
+
+        private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
     }
 
-    
+
 }

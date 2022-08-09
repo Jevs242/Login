@@ -1,6 +1,6 @@
 ﻿namespace Login
 {
-    partial class Form1
+    partial class Login
     {
         /// <summary>
         /// Required designer variable.
@@ -106,6 +106,7 @@
             this.pictureBox1.Size = new System.Drawing.Size(290, 454);
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
+
             // 
             // lbl_newhere
             // 
@@ -126,6 +127,7 @@
             this.btn_signup.TabIndex = 8;
             this.btn_signup.Text = "Sign Up";
             this.btn_signup.UseVisualStyleBackColor = true;
+            this.btn_signup.Click += new System.EventHandler(this.btn_signup_Click);
             // 
             // lbl_Error
             // 
@@ -138,7 +140,7 @@
             this.lbl_Error.TabIndex = 9;
             this.lbl_Error.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // Form1
+            // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -153,8 +155,8 @@
             this.Controls.Add(this.tbx_password);
             this.Controls.Add(this.tbx_Email);
             this.Controls.Add(this.lbl_Email);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Login";
+            this.Text = "Login";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
