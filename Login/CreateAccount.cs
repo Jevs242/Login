@@ -1,4 +1,7 @@
-﻿using System;
+﻿//Jose Velazquez
+//Account with Excel
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -11,16 +14,17 @@ namespace Login
 {
     public partial class CreateAccount : Form
     {
-        string path = Directory.GetCurrentDirectory() + "\\Accounts.xlsx";
-        Excel.Application excel = new Excel.Application();
-        Workbook wb;
-        Worksheet ws;
+        //For all email that are in excel
         List<string> listEmail = new List<string>();
+        //For all email that are in excel
         List<string> listPassword = new List<string>();
+        //For Valid the email
         static Regex ValidEmailRegex = CreateValidEmailRegex();
         public CreateAccount()
         {
             InitializeComponent();
+
+            //Set the list var in this form with the other form 
             Login F1 = new Login();
             listEmail = F1.listEmail;
             listPassword = F1.listPassword;
@@ -28,6 +32,7 @@ namespace Login
 
         private void btn_Summit_Click(object sender, EventArgs e)
         {
+            //Add Text to string
             string email = tbx_Email.Text;
             string password = tbx_password.Text;
 
@@ -35,6 +40,7 @@ namespace Login
 
             if (EmailIsValid(email))
             {
+                //Verification that not exist another with same email
                 for (int i = 0; i < listEmail.Count; i++)
                 {
                     if (listEmail[i] == "Email")
@@ -49,13 +55,15 @@ namespace Login
                         break;
                     }
                 }
+
                 if (success)
                 {
+                    
                     if (ValidatePassword(password))
                     {
+                        //Vefication that the password are the same passaword
                         if (tbx_password.Text == tbx_ConfirmPassword.Text)
                         {
-                            
                             listEmail.Add(email);
                             listEmail.Add(password);
                             addData(email , password);
@@ -70,18 +78,13 @@ namespace Login
                     else
                     {
                         lbl_Error.Text = "Password Invalid";
-                    }
-
-                    
+                    }   
                 }
             }
             else
             {
                 lbl_Error.Text = "Email Invalid";
             }
-
-
-
         }
 
         private static Regex CreateValidEmailRegex()
@@ -137,21 +140,36 @@ namespace Login
 
         private void btn_signup_Click(object sender, EventArgs e)
         {
+            //For Change form to another form
+
+            //Create other form var
             Login F1 = new Login();
+            //Hide this form
             this.Hide();
+            //Show the other form
             F1.Show();
         }
 
         public void addData(string email , string password)
         {
+            //Get the exact location of Excel
+            string path = Directory.GetCurrentDirectory() + "\\Accounts.xlsx";
+            //The application Excel
+            Excel.Application excel = new Excel.Application();
+            //Book Excel
+            Workbook wb;
+            //Sheet Excel
+            Worksheet ws;
+            //Open Excel
             wb = excel.Workbooks.Open(path);
-
+            //Which Sheets is to be opened
             ws = wb.Worksheets[1];
-
+            //Search the cells what do you want put the value
             ws.Cells[9, 1] = email;
             ws.Cells[9, 2] = password;
-
+            //Close Book
             wb.Close(true);
+            //Close Excel
             excel.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
         }
